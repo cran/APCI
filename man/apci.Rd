@@ -2,20 +2,12 @@
 \alias{apci}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
- run apci model
+ Run apci model
 }
 \description{
- run apci model
+ run APC-I model
 }
-\usage{
-apci(
-  outcome = "inlfc", age = "acc",
-  period = "pcc", cohort = NULL,
-  weight = NULL, covariate = NULL,
-  data, family = "quasibinomial",
-  dev.test = TRUE, print = TRUE, ...
-)
-}
+
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{outcome}{
@@ -48,6 +40,26 @@ Logical, specifying if the global F test (step 1) should be implemented before r
   \item{print}{
 Logical, specifying if the intermediate results should be displayed on the screen in running the model. The default setting is TRUE in order to show the results explicitly although it can be too clumpy when the intermediate results are shown on the screen.
 }
+  \item{gee}{
+logical, indicating if the data is cross-sectional data or longitudinal/panel data. If \code{TRUE}, the generalized estimating equation will be used to correct the standard error estimates. The default is \code{FALSE}, indicating that the data are cross-sectional.
+  }
+  \item{id}{
+A vector of character, specifying the cluster index in longitudinal data. It is required when \code{gee} is \code{TRUE}. The length of the vector should be the same as the number of observations.
+  }
+  \item{corstr}{
+a character string, specifying a possible correlation structure in the error terms when \code{gee} is \code{TRUE}. The following are allowed: \code{independence}, \code{fixed}, \code{stat\_M\_dep}, \code{non\_stat\_M\_dep}, \code{exchangeable}, \code{AR-M} and \code{unstructured}. The default value is \code{exchangeable}.
+  }
+  \item{unequal_interval}{
+Logical, indicating if age and period groups are of the same width. The default is set as \code{TRUE}.
+  }
+  \item{age_range, period_range}{
+Numeric vector indicating the actual age and period range (e.g., 10 to 59 years old from 2000 to 2019).
+  }
+  \item{age_interval, period_interval, age_group, period_group}{
+Numeric values or character vectors indicating how age and period are
+grouped. \code{age_interval} and \code{period_interval} are numbers
+indicating the width of age and period groups respectively. \code{age_group} and \code{period_group} are character vectors explicitly listing all potential age and period groups. Either \code{age_interval}(\code{period_interval}) or \code{age_group} (\code{period_group}) have to be defined when \code{unequal_interval} is \code{TRUE}.
+  }
   \item{\dots}{
 %%     ~~Describe \code{\dots} here~~
 }

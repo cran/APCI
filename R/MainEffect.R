@@ -4,11 +4,14 @@
 maineffect <- function(A,P,C,
                        model = temp6,
                        data,
+                       gee=FALSE,
                        ...){
 
   r6 = model$coefficients[stringr::str_detect(names(model$coefficients) , "acc|pcc|(Intercept)")]
-  r6se = summary(model)$coef[stringr::str_detect(names(model$coefficients) , "acc|pcc|(Intercept)"),"Std. Error"]
-  r6p = summary(model)$coef[stringr::str_detect(names(model$coefficients) , "acc|pcc|(Intercept)") ,"Pr(>|t|)"]
+  r6se = summary(model)$coef[stringr::str_detect(names(model$coefficients) , "acc|pcc|(Intercept)"),
+                             stringr::str_detect(colnames(summary(model)$coef) , "Std. Error|Robust S.E.")]
+  r6p = summary(model)$coef[stringr::str_detect(names(model$coefficients) , "acc|pcc|(Intercept)") ,
+                            stringr::str_detect(colnames(summary(model)$coef) , "Pr(>|t|)|Robust z")]
 
 
 ############# computing "full" age, period, and covariance effects ##############
@@ -23,12 +26,29 @@ S1[ind]    = rep(-1,(A-1))
 # fullae = as.vector(S1%*%model$coef[(1+covn+1):(1+covn+A-1)])
 fullae = as.vector(S1%*%model$coef[stringr::str_detect(names(model$coef) , "^acc([0-9])*$" )])
 
-row_ind <- stringr::str_detect(rownames(vcov(model)) , "^acc([0-9])*$")
-col_ind <- stringr::str_detect(colnames(vcov(model)) , "^acc([0-9])*$")
 
-fullas = sqrt(diag(S1%*%vcov(model)[row_ind, col_ind]%*%t(S1)))
-fullat = fullae/fullas
-fullap = pt(-abs(fullat),df.residual(model))*2
+if(gee==TRUE){
+  df = model$nobs-length(model$coefficients)
+  row_ind <- stringr::str_detect(rownames(model$robust.variance) , "^acc([0-9])*$")
+  col_ind <- stringr::str_detect(colnames(model$robust.variance) , "^acc([0-9])*$")
+
+  fullas = sqrt(diag(S1%*%model$robust.variance[row_ind, col_ind]%*%t(S1)))
+  fullat = fullae/fullas
+
+  # df = nrow(data)-length(model$coefficients)
+  df = model$nobs-length(model$coefficients)
+}else{
+  row_ind <- stringr::str_detect(rownames(vcov(model)) , "^acc([0-9])*$")
+  col_ind <- stringr::str_detect(colnames(vcov(model)) , "^acc([0-9])*$")
+
+  fullas = sqrt(diag(S1%*%vcov(model)[row_ind, col_ind]%*%t(S1)))
+  fullat = fullae/fullas
+
+  # df = nrow(model$data)-length(model$coefficients)
+  df = model$df.residual
+}
+# fullap = pt(-abs(fullat),df.residual(model))*2
+fullap = pt(-abs(fullat),df)*2
 
 sig = rep('   ', A)
 sig[fullap<.05] = '*  '
@@ -48,12 +68,23 @@ S2[newind]  = diag(P-1)
 S2[ind]    = rep(-1,(P-1))
 
 fullpe = as.vector(S2%*%model$coef[stringr::str_detect(names(model$coef) , "^pcc([0-9])*$" )])
-row_ind <- stringr::str_detect(rownames(vcov(model)) , "^pcc([0-9])*$")
-col_ind <- stringr::str_detect(colnames(vcov(model)) , "^pcc([0-9])*$")
 
-fullps = sqrt(diag(S2%*%vcov(model)[row_ind,col_ind]%*%t(S2)))
+if(gee==TRUE){
+  row_ind <- stringr::str_detect(rownames(model$robust.variance) , "^pcc([0-9])*$")
+  col_ind <- stringr::str_detect(colnames(model$robust.variance) , "^pcc([0-9])*$")
+
+  fullps = sqrt(diag(S2%*%model$robust.variance[row_ind,col_ind]%*%t(S2)))
+
+}else{
+  row_ind <- stringr::str_detect(rownames(vcov(model)) , "^pcc([0-9])*$")
+  col_ind <- stringr::str_detect(colnames(vcov(model)) , "^pcc([0-9])*$")
+
+  fullps = sqrt(diag(S2%*%vcov(model)[row_ind,col_ind]%*%t(S2)))
+}
+
 fullpt = fullpe/fullps
-fullpp = pt(-abs(fullpt),df.residual(model))*2
+# fullpp = pt(-abs(fullpt),df.residual(model))*2
+fullpp = pt(-abs(fullpt),df)*2
 
 sig = rep('   ', P)
 sig[fullpp<.05] = '*  '

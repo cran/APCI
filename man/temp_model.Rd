@@ -8,9 +8,18 @@ Estimate APC-I model
 Estimate the APCI original model. This is a generalized linear regression model.
 }
 \usage{
-temp_model(data, outcome = "inlfc", age = "acc",
-period = "pcc", cohort = NULL, weight = NULL,
-covariate = NULL, family = "quasibinomial", ...)
+temp_model(data,
+           outcome = "inlfc",
+           age = "acc",
+           period = "pcc",
+           cohort = NULL,
+           weight = NULL,
+           covariate = NULL,
+           family = "quasibinomial",
+           gee = FALSE,
+           id = NULL,
+           corstr = "exchangeable",
+           ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -38,6 +47,15 @@ An optional vector of characters, representing the name(s) of the user-specified
   \item{family}{
 Used to specify the statistical distribution of the error term and link function to be used in the model. Usually, it is a character string naming a family function. For example, family can be "binomial", "multinomial"", or "gaussian". Users could also check R package glm for more details of family functions.
 }
+  \item{gee}{
+logical, indicating if the data is cross-sectional data or longitudinal/panel data. If \code{TRUE}, the generalized estimating equation will be used to correct the standard error estimates. The default is \code{FALSE}, indicating that the data are cross-sectional.
+  }
+  \item{id}{
+A vector of character, specifying the cluster index in longitudinal data. It is required when \code{gee} is \code{TRUE}. The length of the vector should be the same as the number of observations.
+  }
+  \item{corstr}{
+a character string, specifying a possible correlation structure in the error terms when \code{gee} is \code{TRUE}. The following are allowed: \code{independence}, \code{fixed}, \code{stat\_M\_dep}, \code{non\_stat\_M\_dep}, \code{exchangeable}, \code{AR-M} and \code{unstructured}. The default value is \code{exchangeable}.
+  }
   \item{\dots}{
 %%     ~~Describe \code{\dots} here~~
 }

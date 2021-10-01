@@ -1,13 +1,13 @@
-\name{blackmen}
-\alias{blackmen}
+\name{cpsmen}
+\alias{cpsmen}
 \docType{data}
 \title{
-Black Men
+Labor force participation data for men from 1990 to 1979 in CPS
 }
 \description{
-the dataset for black men
+the dataset for men
 }
-\usage{data("blackmen")}
+\usage{data("cpsmen")}
 \format{
   A data frame with 10000 observations on the following 7 variables.
   \describe{

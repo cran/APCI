@@ -34,7 +34,7 @@ temp_model <- function(data,
   ###############
   data <- as.data.frame(data)
 
-  if(family=="binomial"){
+  if(family=="binomial"&gee==FALSE){
     family <- "quasibinomial"
   }
 

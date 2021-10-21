@@ -1,11 +1,11 @@
-6cf1cd221c5e811324d0bafcd948e942 *DESCRIPTION
+15fd952ec6c9ee6717574d87875d2800 *DESCRIPTION
 d62b9b5e54d92f8c8a0f643594ab489d *NAMESPACE
 5f15de03e0a0026a15c21498daec4a55 *R/CohortDeviation.R
 a66b5d03f37405da081451495e1c82f8 *R/MainEffect.R
 0f90b4df03b2c17cb9ed821afcb4526c *R/ageperiod_group.R
-1882161bcc646d4c516018682c959304 *R/apci.R
+4c6f2718bb04b227badce20499996c9a *R/apci.R
 979c8147f361ad927f5c5edffea43361 *R/globals.R
-ed281998fd02c61baf479f4c16e12188 *R/temp6_model.R
+59dfe7971bc1f628b12909112a4c1c0a *R/temp6_model.R
 5d5414c66ec123b0e0477f7a984a6457 *R/tests.R
 c6a8064ccebccbbac01ff73b0c0eddb3 *R/visualization.R
 f50fb57dff8c88d031afaa26e44689fd *data/cpsmen.rda

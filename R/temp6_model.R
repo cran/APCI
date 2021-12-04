@@ -32,13 +32,13 @@ temp_model <- function(data,
   ###############
   #no missing data
   ###############
-  data <- as.data.frame(data)
+  data2 <- as.data.frame(data)
 
   if(family=="binomial"&gee==FALSE){
     family <- "quasibinomial"
   }
 
-  data2 = na.omit( data[ , unique(c(outcome,age,period,cohort,weight,covariate,id)[!is.null(c(outcome,age,period,cohort,weight,covariate,id))]) ] )
+  # data2 = na.omit( data[ , unique(c(outcome,age,period,cohort,weight,covariate,id)[!is.null(c(outcome,age,period,cohort,weight,covariate,id))]) ] )
 
   if(is.null(weight)){
     weight <- 1

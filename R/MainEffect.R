@@ -47,8 +47,12 @@ if(gee==TRUE){
   # df = nrow(model$data)-length(model$coefficients)
   df = model$df.residual
 }
-# fullap = pt(-abs(fullat),df.residual(model))*2
-fullap = pt(-abs(fullat),df)*2
+
+if(df ==0 ){
+  fullap = 2 * pnorm(-abs(fullat))
+}else{
+  fullap    = pt(-abs(fullat),df)*2
+}
 
 sig = rep('   ', A)
 sig[fullap<.05] = '*  '
@@ -83,8 +87,12 @@ if(gee==TRUE){
 }
 
 fullpt = fullpe/fullps
-# fullpp = pt(-abs(fullpt),df.residual(model))*2
-fullpp = pt(-abs(fullpt),df)*2
+
+if(df ==0 ){
+  fullpp = 2 * pnorm(-abs(fullpt))
+}else{
+  fullpp    = pt(-abs(fullpt),df)*2
+}
 
 sig = rep('   ', P)
 sig[fullpp<.05] = '*  '

@@ -101,7 +101,13 @@ temp_model <- function(data,
   temp6 = survey::svyglm(temp6_formula,
                          wtdata2,
                          family = get(family))
+  if(temp6$df.residual == 0){
+    temp6 = glm(temp6_formula,
+                 data2,
+                 family = get(family))
   }
+  }
+
   # temp6
   # output
   list(A=A,P=P,C=C,model=temp6)

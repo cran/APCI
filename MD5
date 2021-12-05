@@ -1,11 +1,11 @@
-d9744832d0606b9aa915a4f7b20f6a1b *DESCRIPTION
+f21f8eb8925b0eead943ee218ad8e414 *DESCRIPTION
 d62b9b5e54d92f8c8a0f643594ab489d *NAMESPACE
-5f15de03e0a0026a15c21498daec4a55 *R/CohortDeviation.R
-a66b5d03f37405da081451495e1c82f8 *R/MainEffect.R
+2f6d8770c5d5a655331ae59a06dfe5af *R/CohortDeviation.R
+09d88b236791bea2172d5ca626edde6e *R/MainEffect.R
 0f90b4df03b2c17cb9ed821afcb4526c *R/ageperiod_group.R
 4c6f2718bb04b227badce20499996c9a *R/apci.R
-979c8147f361ad927f5c5edffea43361 *R/globals.R
-82bb3c83eea4566aa01c7ec8d9db4c70 *R/temp6_model.R
+3e476160a4a47daa800d5108e921cced *R/globals.R
+7ec6afb6e72af22b221bec6fd95a5e33 *R/temp6_model.R
 5d5414c66ec123b0e0477f7a984a6457 *R/tests.R
 c6a8064ccebccbbac01ff73b0c0eddb3 *R/visualization.R
 d218232fe36744296da9b90858c62c9d *data/blackmen.rda

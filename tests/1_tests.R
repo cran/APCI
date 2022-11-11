@@ -99,4 +99,22 @@ uneqal_interval3$cohort_index
 uneqal_interval2$cohort_average$cohort_average
 uneqal_interval3$cohort_average$cohort_average
 
+# simulated panel data for GEE
+simulation_gee <- simulation
+simulation_gee$id <- 1:nrow(simulation_gee)
+simulation_gee = simulation_gee[sample(nrow(simulation_gee),30000,replace=T),]
+model_gee <- apci(outcome = "y",
+                  age = "age",
+                  period = "period",
+                  cohort = NULL,
+                  weight = NULL,
+                  covariate = NULL,
+                  data=simulation_gee,
+                  family ="gaussian",
+                  dev.test = FALSE,
+                  print = TRUE,
+                  gee = TRUE,
+                  id = "id",
+                  corstr = "exchangeable")
+summary(model_gee)
 

@@ -1,13 +1,13 @@
-f21f8eb8925b0eead943ee218ad8e414 *DESCRIPTION
+a4912a81aef36b4cfaef3894ed0ae764 *DESCRIPTION
 d62b9b5e54d92f8c8a0f643594ab489d *NAMESPACE
 2f6d8770c5d5a655331ae59a06dfe5af *R/CohortDeviation.R
-09d88b236791bea2172d5ca626edde6e *R/MainEffect.R
+409a990fdf1d0288afe5e07e76177091 *R/MainEffect.R
 0f90b4df03b2c17cb9ed821afcb4526c *R/ageperiod_group.R
 4c6f2718bb04b227badce20499996c9a *R/apci.R
 3e476160a4a47daa800d5108e921cced *R/globals.R
-7ec6afb6e72af22b221bec6fd95a5e33 *R/temp6_model.R
+833152e399379f8898dfa148129d33e1 *R/temp6_model.R
 5d5414c66ec123b0e0477f7a984a6457 *R/tests.R
-c6a8064ccebccbbac01ff73b0c0eddb3 *R/visualization.R
+6e0199a3515591c7ff04be210cdc0c04 *R/visualization.R
 d218232fe36744296da9b90858c62c9d *data/blackmen.rda
 4f576e5d95508f9fac65f49493bb866f *data/blackwomen.rda
 f50fb57dff8c88d031afaa26e44689fd *data/cpsmen.rda
@@ -37,5 +37,5 @@ ab3490933e147c568f1251062cefb5b3 *man/temp_model.Rd
 197b5ee9d9d519c10ae9cd663e2e1e89 *man/whitemen.Rd
 0c09d7154300fb6e6457b98c1fa63296 *man/whitewomen.Rd
 c287b8013edfa7e144664daf8537335f *man/women9017.Rd
-6f263a447cc88760f2ad906e36d09b62 *tests/1_tests.R
+75ef748e880d863ea4af91b5f7471b56 *tests/1_tests.R
 67ff5d69c9bdc3ec5be969f44c6cd99f *tests/Rplots.pdf

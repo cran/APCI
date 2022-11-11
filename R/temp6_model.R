@@ -96,6 +96,7 @@ temp_model <- function(data,
                      data = data2,
                      family = get(family),
                      corstr = corstr)
+    temp6$model <- data2
 
   }else{
   temp6 = survey::svyglm(temp6_formula,

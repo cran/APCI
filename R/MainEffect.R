@@ -103,7 +103,16 @@ fullp=cbind(fullpe, fullps, fullpp, fullpsig)
 
 inte = as.vector(r6[1])
 intse = r6se[1]
+# if GEE, generate p-values with manual test, modification: 2022-11-10
+if(gee==TRUE){
+  if(df ==0 ){
+    intp = 2 * pnorm(-abs(inte/intse))
+  }else{
+    intp    = pt(-abs(inte/intse),df)*2
+  }
+}else{
 intp = r6p[1]
+}
 intsig = rep('   ', 1)
 intsig[r6p[1]<.05] = '*  '
 intsig[r6p[1]<.01] = '** '

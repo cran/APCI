@@ -1,5 +1,18 @@
-# age main effect, period main effect (add effecgt names: Intercept, age1 .. A, period1...P)
-# change main effect to age effect, period effect
+#' Estimate age effect and period effect
+#'
+#' Estimate age and period effect from APCI model
+#'
+#' @inheritParams apci
+#' @inheritParams cohortdeviation
+#'
+#' @return A list containing:
+#' \item{intercept}{The overall intercept.}
+#' \item{age_effect}{The estimated age main effect.}
+#' \item{period_effect}{The estimated period main effect.}
+#'
+#' @export
+
+
 
 maineffect <- function(A,P,C,
                        model = temp6,

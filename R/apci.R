@@ -1,4 +1,73 @@
-
+#' Run APC-I model
+#'
+#' Run APC-I model
+#' @inheritParams temp_model
+#' @inheritParams ageperiod_group
+#' @param dev.test Logical, specifying if the global F test should be
+#' implemented before fitting the APC-I model. If \code{TRUE}, apci will first run the
+#' global F test and report the test results; otherwise, apci will skip this
+#' step and return NULL. The default setting is \code{TRUE}. However, users should be
+#' aware that the algorithm will not automatically stop even if there is no
+#' significant age-by-period interactions based on the global F test.
+#' @param print Logical, specifying if the intermediate results should be
+#' displayed in the console when fitting the model. The default setting is
+#' \code{TRUE} to display the results of each procedure.
+#' @param unequal_interval Logical, indicating if age and period groups are
+#' of the same interval width. The default is set as \code{TRUE}.
+#'
+#'
+#' @return A list containing:
+#' \item{model}{The fitted generalized linear model.}
+#' \item{intercept}{The overall intercept.}
+#' \item{age_effect}{The estimated age main effect.}
+#' \item{period_effect}{The estimated period main effect.}
+#' \item{cohort_average}{The estimated inter-cohort average deviations from age
+#' and period main effects.}
+#' \item{cohort_slope}{The estimated intra-cohort life-course linear slopes.}
+#' \item{int_matrix}{A matrix containing the estimated coefficients for
+#' age-by-period interactions.}
+#' \item{cohort_index}{Indices indicating different cohorts.}
+#' \item{data}{Data used for fitting APC-I model.}
+#'
+#' @examples
+#' # load package
+#' library("APCI")
+#' # load data
+#' test_data <- APCI::women9017
+#' test_data$acc <- as.factor(test_data$acc)
+#' test_data$pcc <- as.factor(test_data$pcc)
+#' test_data$educc <- as.factor(test_data$educc)
+#' test_data$educr <- as.factor(test_data$educr)
+#'
+#' # fit APC-I model
+#' APC_I <- APCI::apci(outcome = "inlfc",
+#'                     age = "acc",
+#'                     period = "pcc",
+#'                     cohort = "ccc",
+#'                     weight = "wt",
+#'                     data = test_data,dev.test=FALSE,
+#'                     print = TRUE,
+#'                     family = "gaussian")
+#' summary(APC_I)
+#'
+#' # explore the raw data pattern
+#' apci.plot.raw(data = test_data, outcome_var = "inlfc",age = "acc",
+#'               period = "pcc")
+#' ## alternatively,
+#' apci.plot(data = test_data, outcome_var = "inlfc", age = "acc",model=APC_I,
+#'           period = "pcc", type = "explore")
+#'
+#' # visaulze estimated cohort effects with bar plot
+#' apci.bar(model = APC_I, age = "acc",
+#'          period = "pcc", outcome_var = "inlfc")
+#'
+#' # visaulze estimated cohort effects with heatmap plot
+#' apci.plot.heatmap(model = APC_I, age = "acc",period = "pcc")
+#' ## alternatively,
+#' apci.plot(data = test_data, outcome_var = "inlfc", age = "acc",model=APC_I,
+#'           period = "pcc")
+#'
+#' @export
 
 # APCI Model
 apci <- function(outcome = "inlfc",
@@ -82,14 +151,15 @@ apci <- function(outcome = "inlfc",
   # main effect
   MainEffect <- maineffect(A=A,P=P,C=C,model = temp6,gee=gee.)
   # cohort deviation
-  CohortDeviation <- cohortdeviation(A=A,P=P,C=C,model = temp6,gee=gee.,
-                                     unequal_interval = unequal_interval,
-                                     age_range = age_range,
-                                     period_range = period_range,
-                                     age_interval = age_interval,
-                                     period_interval = period_interval,
-                                     age_group = age_group,
-                                     period_group = period_group)
+  CohortDeviation <- cohortdeviation(A=A,P=P,C=C,model = temp6,gee=gee.)
+  # CohortDeviation <- cohortdeviation(A=A,P=P,C=C,model = temp6,gee=gee.,
+  #                                    unequal_interval = unequal_interval,
+  #                                    age_range = age_range,
+  #                                    period_range = period_range,
+  #                                    age_interval = age_interval,
+  #                                    period_interval = period_interval,
+  #                                    age_group = age_group,
+  #                                    period_group = period_group)
 
 if(print=="TRUE"){
   # Main Effect
@@ -152,7 +222,8 @@ if(print=="TRUE"){
        intercept = MainEffect$intercept,
        age_effect=MainEffect$age_effect,
        period_effect=MainEffect$period_effect,
-       cohort_average = CohortDeviation$cohort_average,cohort_slope=CohortDeviation$cohort_slope,
+       cohort_average = CohortDeviation$cohort_average,
+       cohort_slope=CohortDeviation$cohort_slope,
        int_matrix = CohortDeviation$int_matrix,
        cohort_index = CohortDeviation$cohort_index,
        data = data)

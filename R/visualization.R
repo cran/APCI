@@ -1,24 +1,87 @@
+#' Plot the hexagram heatmap
+#'
+#' Plot the cohort effect in the style of hexagram
+#'
+#' @param model A list recording the results from function \code{apci}.
+#' @inheritParams apci
+#' @param color_scale A vector including two numbers
+#' indicating the limit of the values to be plotted. The
+#' first number is the minimum value to be visualized and the
+#' second is the maximum value to be visualized. If NULL, the
+#' algorithm will automatically select the limits from the data
+#' (estimation results) to set up the scale.
+#'
+#' @param color_map A vector, representing the color palettes to
+#' be used in the figure. The default setting is greys if color_map is
+#' \code{NULL}. Alternations, for example, can be c("blue", "yellow"),
+#' blues, etc.
+#'
+#' @param first_age The first age group.
+#' @param first_period The first period group.
+#' @param interval The width of age and period groups.
+#' @param first_age_isoline Isoline for the first age group.
+#' @param first_period_isoline Isoline for the first period group.
+#' @param isoline_interval Interval of isoline.
+#' @param line_width Width of lines. Default is 0.5.
+#' @param line_color Line colors. Default is grey.
+#' @param label_size Axis label size. Default is 0.5.
+#' @param label_color Axis label color. Default is Black.
+#' @param scale_units Units of scales.
+#' @param wrap_cohort_labels Display the cohort label or not. The default is
+#' \code{TRUE}.
+#' @param quantile A number valued between 0 and 1, representing the
+#' desirable percentiles to be used in visualizing the data or model.
+#' If \code{NULL}, the original scale of the outcome variable will be used.
+#'
+#' @return A hexagram visualizing the APC-I model results.
+#'
+#' @examples
+#' # load package
+#' library("APCI")
+#' # load data
+#' test_data <- APCI::women9017
+#' test_data$acc <- as.factor(test_data$acc)
+#' test_data$pcc <- as.factor(test_data$pcc)
+#' test_data$educc <- as.factor(test_data$educc)
+#' test_data$educr <- as.factor(test_data$educr)
+#'
+#' # fit APC-I model
+#' APC_I <- APCI::apci(outcome = "inlfc",
+#'                     age = "acc",
+#'                     period = "pcc",
+#'                     cohort = "ccc",
+#'                     weight = "wt",
+#'                     data = test_data,dev.test=FALSE,
+#'                     print = TRUE,
+#'                     family = "gaussian")
+#' summary(APC_I)
+#'
+#' # plot hexagram
+#' apci.plot.hexagram(model=APC_I,age="acc",period="pcc",first_age = 20,
+#'                    first_period = 1940, interval = 5)
+#' @export
+
 
 # hexagram ####
 #matrix: age as rows, period as columns first_age = 0,
 apci.plot.hexagram <- function(model, #matrix: age as rows, period as columns first_age,
-                           age,
-                           period,
-                           first_age,
-                           first_period,
-                           interval,
-                           first_age_isoline = NULL,
-                           first_period_isoline = NULL,
-                           isoline_interval = NULL,
-                           color_scale = NULL,
-                           color_map = NULL,
-                           line_width = .5,
-                           line_color = "grey",
-                           label_size = .5,
-                           label_color = "black",
-                           scale_units = "Quintile",
-                           wrap_cohort_labels = TRUE,
-                           quantile = NULL){
+                               age,
+                               period,
+                               first_age,
+                               first_period,
+                               interval,
+                               first_age_isoline = NULL,
+                               first_period_isoline = NULL,
+                               isoline_interval = NULL,
+                               color_scale = NULL,
+                               color_map = NULL,
+                               line_width = .5,
+                               line_color = "grey",
+                               label_size = .5,
+                               label_color = "black",
+                               scale_units = "Quintile",
+                               wrap_cohort_labels = TRUE,
+                               quantile = NULL){
   data <- model$int_matrix
   data.raw <- as.data.frame(model$model$model)
   data.raw[,age] <- data.raw$acc
@@ -37,7 +100,7 @@ apci.plot.hexagram <- function(model, #matrix: age as rows, period as columns fi
   nncol <- ncol(data)
 
   if(!is.null(quantile)){
-  data <- cut(data,quantile(data,probs = seq(0,1,quantile)),
+    data <- cut(data,quantile(data,probs = seq(0,1,quantile)),
                 include.lowest = T,
                 labels = quantile(data,
                                   probs = seq(0,1,quantile))[-1])
@@ -48,21 +111,21 @@ apci.plot.hexagram <- function(model, #matrix: age as rows, period as columns fi
   # setting default values for missing parameters
   if(is.null(first_age_isoline)){
     first_age_isoline = first_age
-    }
+  }
   if(is.null(first_period_isoline)){
     first_period_isoline = first_period
-    }
+  }
   if(is.null(isoline_interval)){
     isoline_interval = 2 * interval }
   if(is.null(color_scale)){ #if color scale is missing use the min and max of data
     color_scale[1] <- min(data)
     color_scale[2] <- max(data)
-    }
+  }
   if(is.null(color_map)){
     # define jet colormap
     jet.colors <- colorRampPalette(c("black", "#00007F", "blue", "#007FFF", "cyan", "#7FFF7F", "yellow", "#FF7F00", "red",
-                                     "#7F0000"))
-    color_map = jet.colors(100)
+                                            "#7F0000"))
+                                            color_map = jet.colors(100)
   }else{
     jet.colors <- colorRampPalette(c(color_map[1],color_map[2]))(100)
     color_map = jet.colors
@@ -156,87 +219,106 @@ apci.plot.hexagram <- function(model, #matrix: age as rows, period as columns fi
             lwd = 1)
   }
 
-       #age-isolines
-       y1 <- compute_ycoordinate(first_period,age_isolines)
-       y2 <- compute_ycoordinate(last_period+ interval,age_isolines)
-       x1 <- compute_xcoordinate(first_period)
-       x2 <- compute_xcoordinate(last_period + interval)
+  #age-isolines
+  y1 <- compute_ycoordinate(first_period,age_isolines)
+  y2 <- compute_ycoordinate(last_period+ interval,age_isolines)
+  x1 <- compute_xcoordinate(first_period)
+  x2 <- compute_xcoordinate(last_period + interval)
 
-       for (i in 1:n_age_isolines){
-         lines(x=c(x1,x2), y=c(y1[i],y2[i]), col = line_color, lwd = line_width)
-         text(x=x2, y=y2[i], labels = paste("A:",age_isolines[i]),
-          col = label_color, cex = label_size, srt = -30,
-          adj = c(0, 0.5))
-       }
-
-       # period-isolines
-       x <- compute_xcoordinate(period_isolines)
-       y1 <- compute_ycoordinate(period_isolines, first_age)
-       y2 <- compute_ycoordinate(period_isolines, last_age+interval)
-       for (i in 1:n_period_isolines){
-         lines(x=c(x[i], x[i]), y=c(y1[i],y2[i]), col = line_color, lwd = line_width)
-         text(x=x[i], y=y2[i], labels = paste("P:",period_isolines[i]),
-       col = label_color, cex = label_size, srt = 90, adj = c(0, .5)) #pos = 4)
-       }
-
-         # cohort-isolines (need some more processing!)
-         # determine the periods where the cohort isolines cross the last age
-         p_top <- cohort_isolines + last_age
-         p_top <- p_top[p_top < last_period]
-         n_top <- length(p_top)
-         # and the periods where they cross the first age
-         p_bottom <- cohort_isolines + first_age
-         p_bottom <- p_bottom[p_bottom > first_period]
-         n_bottom <- length(p_bottom)
-         # and the ages where they cross the first period
-         a_left <- first_period - cohort_isolines
-         if (wrap_cohort_labels){
-           a_left <- a_left[a_left >= first_age]
-           }
-         n_left <- length(a_left)
-         # and the ages where they cross the last period
-         a_right <- last_period - cohort_isolines
-         a_right <- a_right[a_right <= last_age]
-         n_right <- length(a_right)
-         # combine the periods and ages initial and final points on the a*p coordinates
-         # first the left-bottom edge
-         if (wrap_cohort_labels){
-         p1 <- c(rep(first_period, n_left), p_bottom)
-         a1 <- c(a_left, rep(first_age, n_bottom))
-} else {
-  p1 <- c(rep(first_period, n_left))
-  a1 <- c(a_left)
+  for (i in 1:n_age_isolines){
+    lines(x=c(x1,x2), y=c(y1[i],y2[i]), col = line_color, lwd = line_width)
+    text(x=x2, y=y2[i], labels = paste("A:",age_isolines[i]),
+         col = label_color, cex = label_size, srt = -30,
+         adj = c(0, 0.5))
   }
-# then the top-right edge
-p2 <- c(p_top, rep(last_period, n_right))
-a2 <- c(rep(last_age, n_top), a_right)
 
-# convert the a*p coordinates to x-y coordinates
-x1 <- compute_xcoordinate(p1-interval) #,a1-1)
-x2 <- compute_xcoordinate(p2) #,a2)
-y1 <- compute_ycoordinate(p1-interval, a1-interval)
-y2 <- compute_ycoordinate(p2, a2)
-# finally draw the lines.
-for (i in 1:n_cohort_isolines){
-  lines(x=c(x1[i], x2[i]),
-        y=c(y1[i],y2[i]),
-        col = line_color, lwd = line_width)
-  text(x=x1[i], y=y1[i], labels = paste("C:",cohort_isolines[i]+n_age_isolines),
-       col = label_color, cex = label_size, srt = 30,
-       adj = c(1,0.5))
+  # period-isolines
+  x <- compute_xcoordinate(period_isolines)
+  y1 <- compute_ycoordinate(period_isolines, first_age)
+  y2 <- compute_ycoordinate(period_isolines, last_age+interval)
+  for (i in 1:n_period_isolines){
+    lines(x=c(x[i], x[i]), y=c(y1[i],y2[i]), col = line_color, lwd = line_width)
+    text(x=x[i], y=y2[i], labels = paste("P:",period_isolines[i]),
+         col = label_color, cex = label_size, srt = 90, adj = c(0, .5)) #pos = 4)
+  }
+
+  # cohort-isolines (need some more processing!)
+  # determine the periods where the cohort isolines cross the last age
+  p_top <- cohort_isolines + last_age
+  p_top <- p_top[p_top < last_period]
+  n_top <- length(p_top)
+  # and the periods where they cross the first age
+  p_bottom <- cohort_isolines + first_age
+  p_bottom <- p_bottom[p_bottom > first_period]
+  n_bottom <- length(p_bottom)
+  # and the ages where they cross the first period
+  a_left <- first_period - cohort_isolines
+  if (wrap_cohort_labels){
+    a_left <- a_left[a_left >= first_age]
+  }
+  n_left <- length(a_left)
+  # and the ages where they cross the last period
+  a_right <- last_period - cohort_isolines
+  a_right <- a_right[a_right <= last_age]
+  n_right <- length(a_right)
+  # combine the periods and ages initial and final points on the a*p coordinates
+  # first the left-bottom edge
+  if (wrap_cohort_labels){
+    p1 <- c(rep(first_period, n_left), p_bottom)
+    a1 <- c(a_left, rep(first_age, n_bottom))
+  } else {
+    p1 <- c(rep(first_period, n_left))
+    a1 <- c(a_left)
+  }
+  # then the top-right edge
+  p2 <- c(p_top, rep(last_period, n_right))
+  a2 <- c(rep(last_age, n_top), a_right)
+
+  # convert the a*p coordinates to x-y coordinates
+  x1 <- compute_xcoordinate(p1-interval) #,a1-1)
+  x2 <- compute_xcoordinate(p2) #,a2)
+  y1 <- compute_ycoordinate(p1-interval, a1-interval)
+  y2 <- compute_ycoordinate(p2, a2)
+  # finally draw the lines.
+  for (i in 1:n_cohort_isolines){
+    lines(x=c(x1[i], x2[i]),
+          y=c(y1[i],y2[i]),
+          col = line_color, lwd = line_width)
+    text(x=x1[i], y=y1[i], labels = paste("C:",cohort_isolines[i]+n_age_isolines),
+         col = label_color, cex = label_size, srt = 30,
+         adj = c(1,0.5))
+  }
+
+  # create the colorbar
+  par(las=2)
+  par(mar=c(10,2,10,2.5))
+  cb_range <- seq(from = color_scale[1], to = color_scale[2], length.out = ncol)
+  image(y=cb_range,z=t(cb_range), col=color_map, axes=FALSE, main=scale_units, cex.main=.8)
+  axis(4,cex.axis=label_size,mgp=c(0,.5,0))
 }
 
-# create the colorbar
-par(las=2)
-par(mar=c(10,2,10,2.5))
-cb_range <- seq(from = color_scale[1], to = color_scale[2], length.out = ncol)
-image(y=cb_range,z=t(cb_range), col=color_map, axes=FALSE, main=scale_units, cex.main=.8)
-axis(4,cex.axis=label_size,mgp=c(0,.5,0))
-}
+#' Calculate x coordinate value
+#'
+#' Calculate x coordinate value for plotting hexagram in visualizing APC-I
+#' results.
+#'
+#' @param p Period value.
+#' @return The coordinate value for x axis.
+#' @export
 
 compute_xcoordinate <- function(p) { x <- p * sqrt(3) / 2
 return(x)
 }
+
+#' Calculate y coordinate value
+#'
+#' Calculate y coordinate value for plotting hexagram in visualizing APC-I
+#' results.
+#'
+#' @param p Period value
+#' @param a Age value
+#' @return The coordinate value for y axis.
+#' @export
 
 compute_ycoordinate <- function(p, a){ y <- a - p / 2
 return(y) }
@@ -244,6 +326,40 @@ return(y) }
 
 
 # heatmap ####
+#' Plot the heatmap for APC-I model
+#'
+#' Plot the heatmap to visualize cohort effects estimated by APC-I model.
+#'
+#' @inheritParams apci.plot.hexagram
+#' @param \dots Additional arguments to be passed to the function.
+#'
+#' @return A heatmap visualizing cohort effects estimated by APC-I model.
+#' @examples
+#' # load package
+#' library("APCI")
+#' # load data
+#' test_data <- APCI::women9017
+#' test_data$acc <- as.factor(test_data$acc)
+#' test_data$pcc <- as.factor(test_data$pcc)
+#' test_data$educc <- as.factor(test_data$educc)
+#' test_data$educr <- as.factor(test_data$educr)
+#'
+#' # fit APC-I model
+#' APC_I <- APCI::apci(outcome = "inlfc",
+#'                     age = "acc",
+#'                     period = "pcc",
+#'                     cohort = "ccc",
+#'                     weight = "wt",
+#'                     data = test_data,dev.test=FALSE,
+#'                     print = TRUE,
+#'                     family = "gaussian")
+#' summary(APC_I)
+#'
+#' # plot heatmap
+#' apci.plot.heatmap(model=APC_I,age="acc",period="pcc",first_age = 20,
+#'                   first_period = 1940, interval = 5)
+#' @export
+
 apci.plot.heatmap <- function(model,
                               age,
                               period,
@@ -354,7 +470,49 @@ g+
 # apci.plot.heatmap(model = APC_I,
 #                   age = "acc",period = 'pcc')
 
+
+
+
 # line.raw ####
+#' Plotting age and period patterns
+#'
+#' Visualize the age and period patterns by plotting the
+#' raw scores in each age and period square.
+#'
+#' @inheritParams apci.plot.hexagram
+#' @inheritParams apci
+#' @param outcome_var An object of class character indicating
+#' the name of the outcome variable used in the model. The
+#' outcome variable can be a continuous, binary, categorical, or count variable.
+#' @param \dots Additional arguments to be passed to the function.
+#'
+#' @return A plot with two panels showing the age and period trends separately.
+#' @examples
+#' # load package
+#' library("APCI")
+#' # load data
+#' test_data <- APCI::women9017
+#' test_data$acc <- as.factor(test_data$acc)
+#' test_data$pcc <- as.factor(test_data$pcc)
+#' test_data$educc <- as.factor(test_data$educc)
+#' test_data$educr <- as.factor(test_data$educr)
+#'
+#' # fit APC-I model
+#' APC_I <- APCI::apci(outcome = "inlfc",
+#'                     age = "acc",
+#'                     period = "pcc",
+#'                     cohort = "ccc",
+#'                     weight = "wt",
+#'                     data = test_data,dev.test=FALSE,
+#'                     print = TRUE,
+#'                     family = "gaussian")
+#' summary(APC_I)
+#'
+#' # plot the raw pattern
+#' apci.plot.raw(data = test_data, outcome_var = "inlfc",age = "acc",
+#'               period = "pcc")
+#' @export
+
 apci.plot.raw <- function(data,
                              outcome_var,
                              age,
@@ -365,7 +523,9 @@ apci.plot.raw <- function(data,
   data$age <- data[,age]%>%as.factor
   data$period <- data[,period]%>%as.factor
 
-  g1 <- ggplot2::ggplot(data,
+  g1 <- ggplot2::ggplot(data%>%
+                dplyr::group_by(age,period) %>%
+                dplyr::summarize(outcome_var = mean(outcome_var,na.rm=TRUE),.groups='drop'),
                ggplot2::aes(x=period,group=age,
                             y = outcome_var,col=age))+
     ggplot2::geom_point()+
@@ -381,7 +541,9 @@ apci.plot.raw <- function(data,
                                      group=NA,y=outcome_var,col=NA),
               size = 3,shape=8,color="black")
 
- g2 <- ggplot2::ggplot(data,
+ g2 <- ggplot2::ggplot(data%>%
+                         dplyr::group_by(age,period) %>%
+                         dplyr::summarize(outcome_var = mean(outcome_var,na.rm=TRUE),.groups='drop'),
                        ggplot2::aes(x=age,group=period,y = outcome_var,col=period))+
    ggplot2::geom_point()+
    ggplot2::geom_path()+
@@ -402,6 +564,52 @@ apci.plot.raw <- function(data,
 
 
 # combine ####
+#' Plotting age and period raw scores and APC-I model results
+#'
+#' Arranging data exploration and model results representation
+#' in a harmonized way.
+#'
+#' @inheritParams apci.plot.heatmap
+#' @inheritParams apci
+#' @param outcome_var An object of class character indicating
+#' the name of the outcome variable used in the model. The
+#' outcome variable can be a continuous, binary, categorical, or count variable.
+#' @param type Character, "explore" or "model". If type is "explore",
+#' plots for age and period raw scores will be generated. If type is
+#' "model", model results will be plotted. The default setting is "model".
+#' @param \dots Additional arguments to be passed to the function.
+#'
+#' @return A plot with three panels showing the raw scores or APC-I
+#' model results.
+#' @examples
+#' # load package
+#' library("APCI")
+#' # load data
+#' test_data <- APCI::women9017
+#' test_data$acc <- as.factor(test_data$acc)
+#' test_data$pcc <- as.factor(test_data$pcc)
+#' test_data$educc <- as.factor(test_data$educc)
+#' test_data$educr <- as.factor(test_data$educr)
+#'
+#' # fit APC-I model
+#' APC_I <- APCI::apci(outcome = "inlfc",
+#'                     age = "acc",
+#'                     period = "pcc",
+#'                     cohort = "ccc",
+#'                     weight = "wt",
+#'                     data = test_data,dev.test=FALSE,
+#'                     print = TRUE,
+#'                     family = "gaussian")
+#' summary(APC_I)
+#'
+#' ## plot the raw pattern
+#' apci.plot(data = test_data, outcome_var = "inlfc", age = "acc",model=APC_I,
+#'           period = "pcc", type = "explore")
+#' ## plot the model results
+#' apci.plot(data = test_data, outcome_var = "inlfc", age = "acc",model=APC_I,
+#'           period = "pcc", type = "model")
+#' @export
+
 apci.plot <- function(model,
                            age,
                            period,
@@ -538,6 +746,45 @@ apci.plot <- function(model,
 }
 
 # barplot----
+#' Make barplot for cohort effect
+#'
+#' Visualize cohort effects estimated by APC-I model with bar plots.
+#'
+#' @inheritParams apci.plot
+#' @param outcome_var An object of class character indicating
+#' the name of the outcome variable used in the model. The
+#' outcome variable can be a continuous, binary, categorical, or count variable.
+#' @param cohort_label An optional vector, representing the labels of
+#' cohort groups in the x asix.
+#' @param \dots Additional arguments to be passed to the function.
+#'
+#' @return A bar plot visualizing the cohort effects estimated by APC-I model.
+#' @examples
+#' # load package
+#' library("APCI")
+#' # load data
+#' test_data <- APCI::women9017
+#' test_data$acc <- as.factor(test_data$acc)
+#' test_data$pcc <- as.factor(test_data$pcc)
+#' test_data$educc <- as.factor(test_data$educc)
+#' test_data$educr <- as.factor(test_data$educr)
+#'
+#' # fit APC-I model
+#' APC_I <- APCI::apci(outcome = "inlfc",
+#'                     age = "acc",
+#'                     period = "pcc",
+#'                     cohort = "ccc",
+#'                     weight = "wt",
+#'                     data = test_data,dev.test=FALSE,
+#'                     print = TRUE,
+#'                     family = "gaussian")
+#' summary(APC_I)
+#'
+#' ## visualizing estimated cohort effects with bar plot
+#' apci.bar(model = APC_I, age = "acc", period = "pcc")
+#' @export
+
+
 apci.bar <- function(model,
                      age,
                      period,

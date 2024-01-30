@@ -1,5 +1,6 @@
 # install the package and use this script to test the package
 library("APCI")
+# or: remotes::install_github("jiahui1902/APCI")
 test_data <- APCI::women9017
 test_data$acc <- as.factor(test_data$acc)
 test_data$pcc <- as.factor(test_data$pcc)
@@ -13,11 +14,11 @@ APC_I <- APCI::apci(outcome = "inlfc",
                     cohort = "ccc",
                     weight = "wt",
                     data = test_data,dev.test=FALSE,
-                    print = T,
+                    print = TRUE,
                     family = "gaussian")
 summary(APC_I)
 
-APC_I$model
+APC_I$model$coefficients
 summary(APC_I$model)
 APC_I$dev_global
 APC_I$dev_local
@@ -28,8 +29,17 @@ APC_I$cohort_average
 APC_I$cohort_slope
 APC_I$cohort_index
 
-apci.bar(model = APC_I, age = "acc",period = "pcc")
 
+apci.plot.raw(data = test_data, outcome_var = "inlfc",age="acc",period="pcc")
+apci.plot(data = test_data, outcome_var = "inlfc", age = "acc",model=APC_I,
+          period = "pcc",type="explore")
+
+apci.bar(model = APC_I, age = "acc",period = "pcc")
+apci.plot.heatmap(model = APC_I, age = "acc",period = "pcc")
+apci.plot.hexagram(model = APC_I, age = "acc",period = "pcc",
+                   first_age = 20,first_period = 1990,interval = 5)
+apci.plot(data = test_data, outcome_var = "inlfc", age = "acc",model=APC_I,
+          period = "pcc")
 # other type of generalized linear model
 APC_I2 <- APCI::apci(outcome = "inlfc",
                     age = "acc",
@@ -38,7 +48,7 @@ APC_I2 <- APCI::apci(outcome = "inlfc",
                     weight = "wt",
                     covariate = "offset(log(educ))",
                     data = test_data,dev.test=FALSE,
-                    print = T,
+                    print = TRUE,
                     family = "poisson")
 
 summary(APC_I2)
@@ -51,7 +61,7 @@ uneqal_interval1 <- APCI::apci(outcome = "inlfc",
                     cohort = "ccc",
                     weight = "wt",
                     data = test_data,dev.test=FALSE,
-                    print = T,
+                    print = TRUE,
                     family = "gaussian",
                     unequal_interval = TRUE,
                     age_range = 20:64,
@@ -66,7 +76,7 @@ uneqal_interval2 <- APCI::apci(outcome = "inlfc",
                     cohort = "ccc",
                     weight = "wt",
                     data = test_data,dev.test=FALSE,
-                    print = T,
+                    print = TRUE,
                     family = "gaussian",
                     unequal_interval = TRUE,
                     age_range = 20:64,
@@ -81,7 +91,7 @@ uneqal_interval3 <- APCI::apci(outcome = "inlfc",
                                cohort = "ccc",
                                weight = "wt",
                                data = test_data,dev.test=FALSE,
-                               print = T,
+                               print = TRUE,
                                family = "gaussian",
                                unequal_interval = T,
                                age_range = 20:69,
@@ -102,6 +112,8 @@ uneqal_interval3$cohort_average$cohort_average
 # simulated panel data for GEE
 simulation_gee <- simulation
 simulation_gee$id <- 1:nrow(simulation_gee)
+simulation_gee$idid <- 1:nrow(simulation_gee)
+# simulation_gee$id <- NULL
 simulation_gee = simulation_gee[sample(nrow(simulation_gee),30000,replace=T),]
 model_gee <- apci(outcome = "y",
                   age = "age",
@@ -117,4 +129,3 @@ model_gee <- apci(outcome = "y",
                   id = "id",
                   corstr = "exchangeable")
 summary(model_gee)
-

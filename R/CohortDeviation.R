@@ -1,3 +1,25 @@
+#' Calculate cohort deviation
+#'
+#' Calculate cohort deviation
+#'
+#' @inheritParams apci
+#' @param A,P,C The numbers of age groups, period groups, and cohort groups separately.
+#' @param model A generalized linear regression model generated from
+#' the internal function temp_model
+#'
+#'
+#' @return A list containing:
+#' \item{cohort_average}{The estimated inter-cohort average deviations from age
+#' and period main effects.}
+#' \item{cohort_slope}{The estimated intra-cohort life-course linear slopes.}
+#' \item{int_matrix}{A matrix containing the estimated coefficients for
+#' age-by-period interactions.}
+#' \item{cohort_index}{Indices indicating different cohorts.}
+#'
+#' @export
+
+
+
 # change column names (cohort slope)
 
 cohortdeviation <- function(A,P,C,
@@ -79,9 +101,9 @@ cohortdeviation <- function(A,P,C,
   # })
   if(unequal_interval==TRUE){
   cindex <- ageperiod_group(age_range = age_range, period_range = period_range,
-                            age_interval = age_interval,
-                            period_interval = period_interval,
-                            age_group = age_group,period_group = period_group)
+                          age_interval = age_interval,
+                          period_interval = period_interval,
+                          age_group = age_group,period_group = period_group)
   }else{
     cindex <- sapply(1:P,function(j){
       seq((A+j-1),j, -1)

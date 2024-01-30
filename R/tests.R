@@ -1,3 +1,14 @@
+#' Local and global F test
+#'
+#' Implement local and global F test for APC-I model
+#'
+#' @inheritParams apci
+#' @inheritParams cohortdeviation
+#'
+#' @return A list displaying the global F test results.
+#'
+#' @export
+
 
 tests <- function(model,age="acc",period="pcc",cohort="ccc",
                   A, P, C,

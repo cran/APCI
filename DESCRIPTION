@@ -2,7 +2,7 @@ Package: APCI
 Type: Package
 Title: A New Age-Period-Cohort Model for Describing and Investigating
         Inter-Cohort Differences and Life Course Dynamics
-Version: 1.0.6
+Version: 1.0.7
 Authors@R: c(person("Jiahui", "Xu",email = "jpx5053@psu.edu", role = c("aut", "cre")),
               person("Liying",  "Luo", email = "liyingluo@psu.edu", role = "aut") )
 Maintainer: Jiahui Xu <jpx5053@psu.edu>
@@ -13,9 +13,10 @@ Imports: survey, magrittr, dplyr, ggplot2, data.table, ggpubr, stringr,
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
+RoxygenNote: 7.2.3
 NeedsCompilation: no
-Packaged: 2022-11-11 01:57:09 UTC; xujiahui
+Packaged: 2024-01-30 06:26:25 UTC; jiahuixu
 Author: Jiahui Xu [aut, cre],
   Liying Luo [aut]
 Repository: CRAN
-Date/Publication: 2022-11-11 08:00:02 UTC
+Date/Publication: 2024-01-30 06:40:03 UTC

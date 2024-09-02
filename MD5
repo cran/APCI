@@ -1,4 +1,4 @@
-79e4038d024cc8e49cac2ee86f8525ce *DESCRIPTION
+31e709adc2dd7dc15da62db8e428db55 *DESCRIPTION
 d62b9b5e54d92f8c8a0f643594ab489d *NAMESPACE
 ffc386b4fb9097277bb87330464fe3a8 *R/CohortDeviation.R
 6c097d8ad9817a69ede3d7ac84e9ddbc *R/MainEffect.R
@@ -7,7 +7,7 @@ a80ebe79e3639733518a74a76e960cb8 *R/apci.R
 3e476160a4a47daa800d5108e921cced *R/globals.R
 c3f66f5f84644a627463065eb500bc58 *R/temp6_model.R
 d0e649284449299cf28c54b4524da28b *R/tests.R
-2568ce29ae81858491779580809fe966 *R/visualization.R
+6958a118b843e996c7dfd78de523d0c2 *R/visualization.R
 d218232fe36744296da9b90858c62c9d *data/blackmen.rda
 4f576e5d95508f9fac65f49493bb866f *data/blackwomen.rda
 f50fb57dff8c88d031afaa26e44689fd *data/cpsmen.rda
